@@ -32,7 +32,3 @@ def search(request: SearchRequest):
 def health():
     return {"status": "ok"}
 
-@app.get("/debug")
-def debug():
-    import os
-    return {"env_keys": list(os.environ.keys())}
