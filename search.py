@@ -6,14 +6,14 @@ import os
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
 def get_embedding(text):
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     response = client.embeddings.create(
         input=text,
         model="text-embedding-3-small"
     )
     return response.data[0].embedding
+
 
 def cosine_similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
