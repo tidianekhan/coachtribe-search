@@ -31,3 +31,11 @@ def search(request: SearchRequest):
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/debug")
+def debug():
+    import os
+    return {
+        "openai_key_set": bool(os.getenv("OPENAI_API_KEY")),
+        "openai_key_prefix": os.getenv("OPENAI_API_KEY", "")[:7]
+    }
