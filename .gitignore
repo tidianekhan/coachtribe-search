@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.pyc
+.env
+embeddings/courses.db
+data/courses.json

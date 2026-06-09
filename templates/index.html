@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CoachTribe Zoeken</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* NAV */
+    nav {
+      width: 100%;
+      max-width: 1100px;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    /* HERO */
+    .hero {
+      width: 100%;
+      max-width: 720px;
+      padding: 80px 32px 40px;
+      text-align: center;
+    }
+
+    .hero-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #E8183C;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: #999;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    /* SEARCH BOX */
+    .search-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      background: #1a1a1a;
+      border: 1.5px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 18px 60px 18px 22px;
+      font-size: 16px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-wrap input::placeholder { color: #555; }
+    .search-wrap input:focus { border-color: #E8183C; }
+
+    .search-wrap button {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #E8183C;
+      border: none;
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .search-wrap button:hover { background: #c4102e; }
+
+    .search-wrap button svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* EXAMPLE QUERIES */
+    .examples {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .example-chip {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: 13px;
+      color: #888;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .example-chip:hover {
+      border-color: #E8183C;
+      color: #fff;
+    }
+
+    /* RESULTS */
+    .results {
+      width: 100%;
+      max-width: 720px;
+      padding: 0 32px 80px;
+      margin-top: 48px;
+    }
+
+    .results-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    .result-card {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 12px;
+      padding: 22px 24px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+      text-decoration: none;
+      display: block;
+      position: relative;
+    }
+
+    .result-card:hover { border-color: #E8183C; }
+
+    .result-card-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .result-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .result-desc {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .result-score {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #E8183C;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .loading {
+      text-align: center;
+      color: #444;
+      font-size: 14px;
+      padding: 40px 0;
+      display: none;
+    }
+
+    .loading.active { display: block; }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #222;
+      border-top-color: #E8183C;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty {
+      text-align: center;
+      color: #444;
+      font-size: 14px;
+      padding: 40px 0;
+      display: none;
+    }
+
+    .empty.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="#">
+      <svg class="logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="18" fill="#E8183C"/>
+        <path d="M18 10c-2.5 0-4.5 2-4.5 4.5 0 4.5 4.5 8 4.5 8s4.5-3.5 4.5-8C22.5 12 20.5 10 18 10z" fill="white"/>
+        <circle cx="18" cy="25" r="2" fill="white"/>
+      </svg>
+      <span class="logo-text">CoachTribe</span>
+    </a>
+  </nav>
+
+  <div class="hero">
+    <p class="hero-label">AI Zoeken — Demo</p>
+    <h1>Vind de juiste training</h1>
+    <p>Beschrijf wat je zoekt. De zoekmachine begrijpt de betekenis achter je vraag — niet alleen de woorden.</p>
+
+    <div class="search-wrap">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Bijv. hoe help ik een cliënt met angst?"
+        autocomplete="off"
+      />
+      <button onclick="doSearch()">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </div>
+
+    <div class="examples">
+      <span class="example-chip" onclick="setQuery('hoe start ik een coachpraktijk')">hoe start ik een coachpraktijk</span>
+      <span class="example-chip" onclick="setQuery('technieken voor moeilijke cliënten')">technieken voor moeilijke cliënten</span>
+      <span class="example-chip" onclick="setQuery('meer zelfvertrouwen als coach')">meer zelfvertrouwen als coach</span>
+      <span class="example-chip" onclick="setQuery('NLP technieken leren')">NLP technieken leren</span>
+      <span class="example-chip" onclick="setQuery('omgaan met stress en afleidingen')">omgaan met stress en afleidingen</span>
+    </div>
+  </div>
+
+  <div class="results" id="resultsSection" style="display:none">
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      Zoeken...
+    </div>
+    <div class="empty" id="empty">Geen resultaten gevonden. Probeer een andere zoekopdracht.</div>
+    <div id="resultsList"></div>
+  </div>
+
+  <script>
+    const input = document.getElementById('searchInput');
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doSearch();
+    });
+
+    function setQuery(text) {
+      input.value = text;
+      doSearch();
+    }
+
+    async function doSearch() {
+      const query = input.value.trim();
+      if (!query) return;
+
+      const section = document.getElementById('resultsSection');
+      const loading = document.getElementById('loading');
+      const empty = document.getElementById('empty');
+      const list = document.getElementById('resultsList');
+
+      section.style.display = 'block';
+      loading.classList.add('active');
+      empty.classList.remove('active');
+      list.innerHTML = '';
+
+      try {
+        const res = await fetch('/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query, top_k: 5 })
+        });
+
+        const data = await res.json();
+        loading.classList.remove('active');
+
+        if (!data.results || data.results.length === 0) {
+          empty.classList.add('active');
+          return;
+        }
+
+        list.innerHTML = `<div class="results-label">Top ${data.results.length} resultaten</div>`;
+
+        data.results.forEach(r => {
+          const desc = r.description
+            ? r.description.substring(0, 120) + (r.description.length > 120 ? '…' : '')
+            : 'Geen beschrijving beschikbaar.';
+
+          const scorePercent = Math.round(r.score * 100);
+
+          list.innerHTML += `
+            <a class="result-card" href="${r.url}" target="_blank">
+              <div class="result-card-inner">
+                <div>
+                  <div class="result-title">${r.title}</div>
+                  <div class="result-desc">${desc}</div>
+                </div>
+                <div class="result-score">${scorePercent}%</div>
+              </div>
+            </a>
+          `;
+        });
+
+      } catch (err) {
+        loading.classList.remove('active');
+        empty.classList.add('active');
+      }
+    }
+  </script>
+
+</body>
+</html>
