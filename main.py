@@ -35,9 +35,4 @@ def health():
 @app.get("/debug")
 def debug():
     import os
-    all_vars = dict(os.environ)
-    keys = [k for k in all_vars.keys() if "OPENAI" in k.upper()]
-    return {
-        "openai_related_keys": keys,
-        "total_env_vars": len(all_vars)
-    }
+    return {"env_keys": list(os.environ.keys())}
