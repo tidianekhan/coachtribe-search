@@ -15,8 +15,13 @@ def get_embedding(text):
 def cosine_similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "embeddings", "courses.db")
+
 def search_courses(query, top_k=5):
     query_embedding = np.array(get_embedding(query), dtype=np.float32)
+    conn = sqlite3.connect(DB_PATH)
+    # rest stays the same
 
     conn = sqlite3.connect("embeddings/courses.db")
     cursor = conn.cursor()
