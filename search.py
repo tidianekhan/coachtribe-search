@@ -4,7 +4,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv(override=False) # works locally, ignored on Railway
 
 def get_embedding(text):
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
