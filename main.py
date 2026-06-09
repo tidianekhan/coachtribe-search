@@ -9,6 +9,15 @@ import subprocess
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "embeddings", "courses.db")
 
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.on_event("startup")
 def startup():
     if not os.path.exists(DB_PATH):
@@ -25,7 +34,7 @@ class SearchRequest(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 def index():
-    with open("templates/index.html", "r", encoding="utf-8") as f:
+    with open(os.path.join(BASE_DIR, "templates/index.html"), "r", encoding="utf-8") as f:
         return f.read()
 
 @app.post("/search")
